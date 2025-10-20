@@ -4,7 +4,7 @@ export default function SearchBar() {
     const [typed,Settyped] = useState("");
     const navigate = useNavigate();
     const handleSearch = () => {
-        navigate('/fishinfo');
+        navigate('/loading', {state: {fishName: typed}});
         console.log("Searching for:", typed);
     }
     return (

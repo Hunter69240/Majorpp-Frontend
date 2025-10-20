@@ -20,15 +20,10 @@
 
 import { useState } from 'react';
 
-const FishInfo = () => {
-  const images = [
-    'https://picsum.photos/600/600?random=1',
-    'https://picsum.photos/600/600?random=2',
-    'https://picsum.photos/600/600?random=3',
-    'https://picsum.photos/600/600?random=4',
-    'https://single3dviewerv2.tacbstudios.com/?viewer=Aptri_uc.glb',
-  ];
+const FishInfo = ({data}) => {
+  const images = data;
 
+  
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (

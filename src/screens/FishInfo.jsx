@@ -1,7 +1,17 @@
 import React from 'react'
 import ModelViewer from '../components/ModelViewer'
-
+import { useLocation } from 'react-router-dom'
 export default function FishInfo() {
+    const location = useLocation();
+    const data = location.state?.data;
+    console.log("Found data fishinfo:", data);
+
+    const speciesName =  data.data.ScientificName.split(" ")[1];
+
+    const imagesurl = data.data.images;
+    
+      
+
   return (
     <div>
 
@@ -10,7 +20,7 @@ export default function FishInfo() {
             {/* //3d model */}
            <div>
                 
-                <ModelViewer />
+                <ModelViewer data={imagesurl}/>
                 {/* <img src="/Mock-Model.png" alt="3D Model of Fish" /> */}
            </div>
 
@@ -18,25 +28,17 @@ export default function FishInfo() {
                 {/* //scientific name */}
                 <div>
                     <div className='flex gap-2 items-baseline'>
-                        <p className='text-3xl font-bold'>Scientific Name |</p>
-                         <p className='text-3xl font-bold opacity-11'>Common Name</p>
+                        <p className='text-3xl font-bold'>{data.data.ScientificName}|</p>
+                         <p className='text-3xl font-bold opacity-11'>{data.common_name}</p>
                     </div>
-                    <p className='opacity-12 text-xl'>Kingdom → Phylum → Class → Order → Family → Genus → Species</p>
+                    <p className='opacity-12 text-xl'>{data.data.Kingdom} → {data.data.Phylum} → {data.data.Class} → {data.data.Order} → {data.data.Family} → {data.data.Genus} → {speciesName}</p>
                 </div>
                 {/* //general desc */}
                 <div>
                     <p className='py-5 text-2xl font-bold'>General Desc</p>
 
                     <p className='text-justify  max-w-xl'>
-                        Lacustrine as well as fluviatile species, confined to lakes and moderate to 
-                        large rivers (Ref. 43912). Shoals in standing or slowly flowing open water with 
-                        emergent or submerged vegetation. Generally more active at night or in subdued light. 
-                        Feed from mid-water and surface waters on a wide variety of foods including fish, insects, 
-                        shrimps, snails, plant seeds, and fruit. Oviparous, eggs are unguarded (Ref. 205). Often 
-                        important spawning migrations occur (Ref. 43912). Breed during the rainy season and may be 
-                        either a single or multiple spawner in different localities, laying eggs on vegetation. May 
-                        live up to 6-7 years (Ref. 7248). Max total length 45.0mm (Ref. 43912). Also caught with drawnets. 
-                        In general considered as a flavoured, first class eating fish (Ref. 43912).
+                       {data.data.description}
                     </p>
                 </div>
            </div>
