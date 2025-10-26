@@ -1,6 +1,6 @@
 import React from "react";
 
-export function ScientificName( data ) {
+export function getScientificName( data ) {
     data = data.response.taxon.ScientificName;
     data = data.replace(/\s*\(.*?\)\s*/g, "")
     
@@ -9,9 +9,13 @@ export function ScientificName( data ) {
 
 }
 
+export function getIdentifier(data) { 
+    return data.response.taxon.identifier;
+}
+
 
 // Returns: ['Goldfish', 'Prussian carp', ...]
-export function CommonNames(data) {
+export function getCommonNames(data) {
   const names = data?.response?.taxon?.commonName || [];
   const arr = Array.isArray(names) ? names : [names];
 
@@ -20,42 +24,45 @@ export function CommonNames(data) {
       && item['#text'] 
       && item['@{http://www.w3.org/XML/1998/namespace}lang'] === 'en'
     )
-    .map(item => item['#text']);
+    .map(item => item['#text']
+    
+    );
 }
 
 // Returns: "Animalia" (or whatever is present)
-export function Kingdom(data) {
+export function getKingdom(data) {
   return data?.response?.taxon?.Kingdom || '';
 }
 
 // Returns: "Chordata" (or whatever is present)
-export function Phylum(data) {
+export function getPhylum(data) {
   return data?.response?.taxon?.Phylum || '';
 }
 
 // Returns: "Teleostei" (or whatever is present)
-export function Class(data) {
+export function getClass(data) {
   return data?.response?.taxon?.Class || '';
 }
 
 // Returns: "Cypriniformes" (or whatever is present)
-export function Order(data) {
+export function getOrder(data) {
   return data?.response?.taxon?.Order || '';
 }
 
 // Returns: "Cyprinidae" (or whatever is present)
-export function Family(data) {
+export function getFamily(data) {
   return data?.response?.taxon?.Family || '';
 }
 
 // Returns: "Carassius" (or whatever is present)
-export function Genus(data) {
+export function getGenus(data) {
   return data?.response?.taxon?.Genus || '';
 }
 
 // Returns the main biology/general description text if available
-export function Description(data) {
+export function getDescription(data) {
   const objects = data?.response?.taxon?.dataObject || [];
+
   // Filter text-type data objects
   const textObjects = objects.filter(
     obj => obj.dataType === 'http://purl.org/dc/dcmitype/Text'
@@ -67,21 +74,64 @@ export function Description(data) {
   );
 
   // Fallback: take the first available text object if none matched
-  return (
-    biology?.description || textObjects[0]?.description || ''
-  );
+  let description = biology?.description || textObjects[0]?.description || '';
+
+  // Remove everything inside parentheses ( ... )
+  description = description.replace(/\(.*?\)/g, '').trim();
+
+  return description;
 }
+
 
 // Returns: ["https://...", "https://...", ...]
-export function AllImages(data) {
-  const objects = data?.response?.taxon?.dataObject || [];
-  return objects
-    .filter(obj => obj.dataType === 'http://purl.org/dc/dcmitype/StillImage' && obj.mediaURL)
-    .map(obj => obj.mediaURL);
+export function getAllImages(data) {
+  const objects = data?.Photos?.photos || []; // Array of image entries
+  const threeDurl = data?.threedurl || data?.threedurl || data?.threedstatus.exists; // Handle both naming cases
+   console.log("3D URL found:", data.threedurl);
+  // Extract valid 'actual' image URLs
+  const imageLinks = objects
+    .map(obj => obj.actual)
+    .filter(link => !!link)
+    .slice(0, 5); // limit results if needed
+
+  // Append the 3D model URL (if provided)
+ 
+  imageLinks.push(threeDurl);
+  
+
+  return imageLinks;
 }
 
+
+
+
+export function getAllThumbnails(data) {
+  const objects = data?.Photos?.photos || []; // Access photos array
+  const threeDThumb = data?.threedthumb || data?.threeDThumb || ''; // Handle both naming styles
+
+  // Extract valid 'thumbnail' URLs
+  const thumbnails = objects
+    .map(obj => obj.thumbnail)
+    .filter(link => !!link)
+    .slice(0, 5); // Limit to first 5 thumbnails
+
+  // Add the 3D thumbnail (if available) at the end
+  if (threeDThumb) {
+    thumbnails.push(threeDThumb);
+  }
+
+  return thumbnails;
+}
+
+
+
+
+
+
+
+
 // Returns: array of distribution sentences like ["Europe and Asia", "Introduced to other regions", ...]
-export function Distribution(data) {
+export function getDistribution(data) {
   const objects = data?.response?.taxon?.dataObject || [];
 
   // Filter text-type objects only
@@ -94,17 +144,20 @@ export function Distribution(data) {
     obj => obj.identifier?.includes('FB-Distribution')
   );
 
-  const distributionText = distributionObj?.description || '';
+  // Extract text and remove any content inside parentheses
+  const distributionText = (distributionObj?.description || '')
+    .replace(/\(.*?\)/g, ''); // removes everything between ( and )
 
-  // Split by "." and remove empty strings/extra spaces
+  // Split by "." and clean up
   return distributionText
     .split('.')
     .map(sentence => sentence.trim())
     .filter(sentence => sentence.length > 0);
 }
 
+
 // Returns: { habitat: ["benthopelagic", "freshwater", ...], migration: "Potamodromous. Migrates within rivers..." }
-export function HabitatAndMigration(data) {
+export function getHabitatAndMigration(data) {
   const objects = data?.response?.taxon?.dataObject || [];
 
   // Filter text-type objects only
@@ -139,7 +192,7 @@ export function HabitatAndMigration(data) {
 
 
 
-export function LifeCycleAndSize(data) {
+export function getLifeCycleAndSize(data) {
   const objects = data?.response?.taxon?.dataObject || [];
 
   

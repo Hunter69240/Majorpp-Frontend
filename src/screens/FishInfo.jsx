@@ -6,9 +6,6 @@ export default function FishInfo() {
   const data = location.state?.data;
   console.log("Found data fishinfo:", data);
   
-   
- 
-      
 
   return (
     <div>
@@ -18,7 +15,7 @@ export default function FishInfo() {
             {/* //3d model */}
            <div>    
                 
-                <ModelViewer data={data.Img}/>
+                <ModelViewer data={data.Images} thumbnail={data.Thumbnails}/>
                 {/* <img src="/Mock-Model.png" alt="3D Model of Fish" /> */}
            </div>
 
@@ -26,17 +23,23 @@ export default function FishInfo() {
                 {/* //scientific name */}
                 <div>
                     <div className='flex gap-2 items-baseline'>
-                        <p className='text-3xl font-bold capitalize'>{data.Sname}|</p>
-                         <p className='text-3xl font-bold opacity-11 capitalize'>Common name</p>
+                        <p className='text-3xl font-bold capitalize'>{data.Scientificname}|</p>
+                        
                     </div>
-                    <p className='opacity-12 text-xl capitalize'>{data.Kdom} → {data.Plum} → {data.Cl} → {data.Or} → {data.Fam} → {data.Gen} → {data.Sname}</p>
+
+                    <p className='text-3xl font-bold opacity-11 capitalize'>Common name: 
+                        {data.Commonname.map((name, index) => (
+                            <span key={index} className="ml-2">{name}{index < data.Commonname.length - 1 ? ',' : ''} </span>
+                        ))}
+                    </p>
+                    <p className='opacity-12 text-xl capitalize'>{data.Kingdom} → {data.Phylum} → {data.Class} → {data.Order} → {data.Family} → {data.Genus} → {data.Scientificname}</p>
                 </div>
                 {/* //general desc */}
                 <div>
                     <p className='py-5 text-2xl font-bold'>General Desc</p>
  
                     <p className="text-justify max-w-xl break-words whitespace-normal leading-relaxed capitalize">
-                        {data.Desc}
+                        {data.Description}
                     </p>
 
                 </div>
@@ -49,7 +52,7 @@ export default function FishInfo() {
             <div className='max-w-lg'>
                 <p className='font-semibold text-xl'>Distribution</p>
                 <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
-                    {data.Dist?.map((item, index) => (
+                    {data.Distribution?.map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
                 </ul>
@@ -64,13 +67,13 @@ export default function FishInfo() {
                     {/* Habitat as a bulleted list */}
                     <div className="max-w-xl whitespace-normal break-words leading-relaxed">
                     <ul className="list-disc ml-5 space-y-1 capitalize">
-                        {data.HandM.habitat?.map((item, index) => (
+                        {data.HabitatandMigration.habitat?.map((item, index) => (
                         <li key={index}>{item}</li>
                         ))}
                     </ul>
 
                     {/* Migration as a single string */}
-                    <p className="mt-2 capitalize">{'\u2022'} {data.HandM.migration}</p>
+                    <p className="mt-2 capitalize">{'\u2022'} {data.HabitatandMigration.migration}</p>
             </div>
 
 
@@ -85,14 +88,14 @@ export default function FishInfo() {
                 <p className='font-semibold text-xl'>Life Cycle | Size</p>
 
                 <ul className="max-w-[600px] whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
-                    {data.LCS.lifeCycle?.map((item, index) => (
+                    {data.LifeCycleAndSize.lifeCycle?.map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
                 </ul>
 
 
                 <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
-                    {data.LCS.size?.map((item, index) => (
+                    {data.LifeCycleAndSize.size?.map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
                 </ul>
@@ -103,7 +106,7 @@ export default function FishInfo() {
             <div>
                 <p className='font-semibold text-xl'>Uses</p>
                 <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
-                    {data.using?.map((item, index) => (
+                    {data.Uses?.map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
                 </ul>
@@ -118,14 +121,14 @@ export default function FishInfo() {
                 <p className='font-semibold text-xl'>Threats | Diseases</p>
                 
                 <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
-                    {data.tad.diseases?.map((item, index) => (
+                    {data.ThreatsAndDiseases.diseases?.map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
                 </ul>
 
 
                 <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
-                    {data.tad.threats?.map((item, index) => (
+                    {data.ThreatsAndDiseases.threats?.map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
                 </ul>
