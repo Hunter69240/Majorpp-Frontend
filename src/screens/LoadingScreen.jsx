@@ -22,17 +22,13 @@ import {
   getThreeDStatusStatus
 } from "../components/DataCleaning/DataCleaners";
 
-
 export default function LoadingScreen() {
   const location = useLocation();
   const navigate = useNavigate();
-  const fishName = location.state?.fishName; // input name from previous page
+  const fishName = location.state?.fishName; 
   const [error, setError] = useState(null);
 
   console.log("Loading screen received fish name:", fishName);
-
-  
-  
 
   useEffect(() => {
     async function fetchFishData() {
@@ -42,8 +38,8 @@ export default function LoadingScreen() {
       }
 
       try {
-        const API_URL = import.meta.env.VITE_API_URL; // Update as needed
-        const API_TOKEN = import.meta.env.VITE_API_TOKEN; // Update as needed
+        const API_URL = import.meta.env.VITE_API_URL; 
+        const API_TOKEN = import.meta.env.VITE_API_TOKEN; 
         const response = await fetch(API_URL, {
           method: "POST",
           headers: {
@@ -60,7 +56,6 @@ export default function LoadingScreen() {
 
         const rawData = await response.json();
 
-        // Transform the API response using your existing data processing functions
         const organizedData = {
           identifier: getIdentifier(rawData),
           Scientificname: getScientificName(rawData),
@@ -78,13 +73,18 @@ export default function LoadingScreen() {
           LifeCycleAndSize: getLifeCycleAndSize(rawData),
           Uses: getUses(rawData),
           ThreatsAndDiseases: getThreatsAndDiseases(rawData),
-		      Thumbnails: getAllThumbnails(rawData),
+          Thumbnails: getAllThumbnails(rawData),
           ThreeDStatus: getThreeDStatusStatus(rawData),
         };
 
-        // Delay navigation slightly for smoother UX
+        // Navigate with BOTH data and fishName for polling
         setTimeout(() => {
-          navigate("/fishinfo", { state: { data: organizedData } });
+          navigate("/fishinfo", { 
+            state: { 
+              data: organizedData,
+              fishName: fishName  // Pass fishName for background polling
+            } 
+          });
         }, 400);
 
       } catch (err) {
@@ -96,32 +96,25 @@ export default function LoadingScreen() {
     fetchFishData();
   }, [fishName, navigate]);
 
- 
-
   if (error) {
     return <div>Error loading fish data: {error}</div>;
   }
 
-  
   return (
     <div className="relative w-full h-screen overflow-hidden">
-  {/* Background video */}
-  <video
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="absolute inset-0 w-full h-full object-cover transform"
-  >
-    <source src="Loading-screen.mp4" type="video/mp4" />
-  </video>
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover transform"
+      >
+        <source src="Loading-screen.mp4" type="video/mp4" />
+      </video>
 
-  
-    <div className="absolute inset-0 flex items-center justify-center z-10 mb-10 sm:mb-5 mr-5 sm:mr-2">
+      <div className="absolute inset-0 flex items-center justify-center z-10 mb-10 sm:mb-5 mr-5 sm:mr-2">
         <Loader />
+      </div>
     </div>
-
-</div>
-
   );
 }
