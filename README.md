@@ -223,7 +223,7 @@ This project is part of the Majorpp-Frontend repository.
 This project was developed as a major educational platform for marine biology enthusiasts, students, and researchers.
 
 - **[Anoop C Kulkarni](https://github.com/anoopckulkarni)** - Developer
-- **[Nik Ster Prime](https://github.com/NikSterPrime)** - Developer
+- **[NikSterPrime](https://github.com/NikSterPrime)** - Developer
 
 ---
 
