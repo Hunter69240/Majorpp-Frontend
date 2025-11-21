@@ -93,7 +93,7 @@ export function getDescription(data) {
 
 // Returns: ["https://...", "https://...", ...]
 export function getAllImages(data) {
-  const objects = data?.Photos?.photos || []; // Array of image entries
+  const objects = data?.Photos?.photos || []; // Array of  image entries
   const threeDurl = data?.threedurl || data?.threedurl || data?.threedstatus.exists; // Handle both naming cases
    console.log("3D URL found:", data.threedurl);
   // Extract valid 'actual' image URLs
