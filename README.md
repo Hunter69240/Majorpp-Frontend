@@ -17,7 +17,7 @@ Users can search for any fish species and instantly access detailed taxonomic in
 *Comprehensive details about fish species with image gallery*
 
 ### Interactive 3D Model Viewer
-![3D Model Viewer](screenshots/3d-model.png)
+![3D Model Viewer](screenshots/3D-model.png)
 *Explore fish in stunning 3D - rotate, zoom, and interact*
 
 ## ✨ Key Features
