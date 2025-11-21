@@ -39,7 +39,12 @@ export default function LoadingScreen() {
 
       try {
         const API_URL = import.meta.env.VITE_API_URL; 
-        const API_TOKEN = import.meta.env.VITE_API_TOKEN; 
+        const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+        
+        if (!API_URL || !API_TOKEN) {
+          throw new Error("API configuration is missing. Please contact support.");
+        }
+        
         const response = await fetch(API_URL, {
           method: "POST",
           headers: {
@@ -55,6 +60,11 @@ export default function LoadingScreen() {
         }
 
         const rawData = await response.json();
+        
+        // Validate that we received actual fish data
+        if (!rawData || !rawData.response || !rawData.response.taxon) {
+          throw new Error("No fish data found. Please check the fish name and try again.");
+        }
 
         const organizedData = {
           identifier: getIdentifier(rawData),
@@ -89,7 +99,17 @@ export default function LoadingScreen() {
 
       } catch (err) {
         console.error("API fetch failed:", err);
-        setError(err.message);
+        
+        // Provide user-friendly error messages
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          setError("Network error. Please check your internet connection and try again.");
+        } else if (err.message.includes('404')) {
+          setError("Fish species not found. Please try a different name.");
+        } else if (err.message.includes('500') || err.message.includes('503')) {
+          setError("Server is temporarily unavailable. Please try again later.");
+        } else {
+          setError(err.message || "An unexpected error occurred. Please try again later.");
+        }
       }
     }
 
@@ -97,7 +117,30 @@ export default function LoadingScreen() {
   }, [fishName, navigate]);
 
   if (error) {
-    return <div>Error loading fish data: {error}</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center"
+        style={{
+          background: "radial-gradient(circle at center, #B3E5FC 55%, #0288D1 100%)",
+        }}
+      >
+        <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md mx-4 text-center">
+          <div className="text-6xl mb-4">🐠</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Oops! Something Went Wrong</h2>
+          <p className="text-gray-600 mb-6">
+            We couldn't find information for that fish. Please try again later or search for a different fish species.
+          </p>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6">
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+          <button
+            className="bg-gradient-to-r from-[#039BE5] via-[#4DD0E1] to-[#B3E5FC] text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:from-[#0288D1] hover:via-[#00B8D4] hover:to-[#80DEEA] transition-all duration-200"
+            onClick={() => navigate('/')}
+          >
+            Back to Search
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

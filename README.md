@@ -6,6 +6,20 @@
 
 Users can search for any fish species and instantly access detailed taxonomic information, habitat data, life cycle details, conservation status, and interactive 3D visualizations—all in one seamless interface.
 
+## 📸 Screenshots
+
+### Landing Page
+![Landing Page](screenshots/landing-page.png)
+*Search for any fish species with our beautiful ocean-themed interface*
+
+### Fish Information Page
+![Fish Info Page](screenshots/fish-info.png)
+*Comprehensive details about fish species with image gallery*
+
+### Interactive 3D Model Viewer
+![3D Model Viewer](screenshots/3d-model.png)
+*Explore fish in stunning 3D - rotate, zoom, and interact*
+
 ## ✨ Key Features
 
 ### 🔍 Intelligent Search System

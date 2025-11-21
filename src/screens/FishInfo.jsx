@@ -128,7 +128,27 @@ export default function FishInfo() {
   }, [model3DReady, fishName]);
 
   if (!data) {
-    return <div>No fish data available</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center"
+        style={{
+          background: "radial-gradient(circle at center, #B3E5FC 55%, #0288D1 100%)",
+        }}
+      >
+        <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md mx-4 text-center">
+          <div className="text-6xl mb-4">🐠</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">No Fish Data Available</h2>
+          <p className="text-gray-600 mb-6">
+            We couldn't load the fish information. Please try searching again.
+          </p>
+          <button
+            className="bg-gradient-to-r from-[#039BE5] via-[#4DD0E1] to-[#B3E5FC] text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:from-[#0288D1] hover:via-[#00B8D4] hover:to-[#80DEEA] transition-all duration-200"
+            onClick={() => navigation('/')}
+          >
+            Back to Search
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
